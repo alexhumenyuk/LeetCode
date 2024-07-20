@@ -1,30 +1,39 @@
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
+
+typedef struct {
+    char* list;
+} Object;
 
 int compare(const void* a, const void* b) {
     return *(char*)a - *(char*)b;
 }
 
-int isAnagram(char* s, char* t) {
-    int s_len = strlen(s);
-    int t_len = strlen(t);
+bool function1(char* s, char* t) {
+    Object S, T;
 
-    if (s_len != t_len) {
-        return 0;
-    }
+    // Allocate memory for S.list and T.list
+    S.list = malloc((strlen(s) + 1) * sizeof(char));
+    T.list = malloc((strlen(t) + 1) * sizeof(char));
 
-    qsort(s, s_len, sizeof(char), compare);
-    qsort(t, t_len, sizeof(char), compare);
+    // Copy characters from s and t to S.list and T.list
+    strncpy(S.list, s, strlen(s) + 1);
+    strncpy(T.list, t, strlen(t) + 1);
 
-    return (strncmp(s, t, s_len) == 0) ? 1 : 0;
+    // Sort the characters in S.list and T.list
+    qsort(S.list, strlen(S.list), sizeof(char), compare);
+    qsort(T.list, strlen(T.list), sizeof(char), compare);
+
+    // Compare S.list and T.list and return true if they are equal, false otherwise
+    return strcmp(S.list, T.list) == 0;
 }
 
 int main() {
-    char s[] = "amores";
-    char t[] = "roma";
-
-    printf("%d\n", isAnagram(s, t));
-
+    char* s = "amor";
+    char* t = "roma";
+    bool result = function1(s, t);
+    printf(result ? "true" : "false");
     return 0;
 }
